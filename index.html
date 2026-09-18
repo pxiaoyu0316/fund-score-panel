@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¹«Ä¼»ù½ğ´ò·ÖÃæ°å</title>
+    <title>å…¬å‹ŸåŸºé‡‘æ‰“åˆ†é¢æ¿</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* È«¾ÖÑùÊ½ - ÉîÉ«ÉÌÎñ½ğÈÚÒÇ±íÅÌ */
+        /* å…¨å±€æ ·å¼ - æ·±è‰²å•†åŠ¡é‡‘èä»ªè¡¨ç›˜ */
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +27,7 @@
                 "sidebar main";
             height: 100vh;
         }
-        /* ¶¥²¿µ¼º½À¸ */
+        /* é¡¶éƒ¨å¯¼èˆªæ  */
         .header {
             grid-area: header;
             background-color: #1e293b;
@@ -58,7 +58,7 @@
         .btn-reset:hover {
             background-color:#475569;
         }
-        /* ×ó²à±ßÀ¸ */
+        /* å·¦ä¾§è¾¹æ  */
         .sidebar {
             grid-area: sidebar;
             background-color: #1e293b;
@@ -106,7 +106,7 @@
             color:#f97316;
             font-weight:bold;
         }
-        /* Ö÷ÄÚÈİÇøÓò */
+        /* ä¸»å†…å®¹åŒºåŸŸ */
         .main {
             grid-area: main;
             padding:20px;
@@ -178,7 +178,7 @@
         .star {
             color:#fbbf24;
         }
-        /* µ¯´°ÑùÊ½ */
+        /* å¼¹çª—æ ·å¼ */
         .modal-overlay {
             position:fixed;
             inset:0;
@@ -208,7 +208,7 @@
             font-size:1.5rem;
             cursor:pointer;
         }
-        /* ÏìÓ¦Ê½ÒÆ¶¯¶ËÊÊÅä */
+        /* å“åº”å¼ç§»åŠ¨ç«¯é€‚é… */
         @media (max-width: 900px) {
             .app-container {
                 grid-template-columns:1fr;
@@ -239,33 +239,33 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- ¶¥²¿µ¼º½ -->
+        <!-- é¡¶éƒ¨å¯¼èˆª -->
         <header class="header">
-            <h1>¹«Ä¼»ù½ğ´ò·ÖÃæ°å</h1>
+            <h1>å…¬å‹ŸåŸºé‡‘æ‰“åˆ†é¢æ¿</h1>
             <div class="header-actions">
-                <button id="toggleSidebar">É¸Ñ¡Ãæ°å</button>
-                <button class="btn-reset" id="resetAll">ÖØÖÃÉ¸Ñ¡ÓëÈ¨ÖØ</button>
+                <button id="toggleSidebar">ç­›é€‰é¢æ¿</button>
+                <button class="btn-reset" id="resetAll">é‡ç½®ç­›é€‰ä¸æƒé‡</button>
             </div>
         </header>
-        <!-- ×ó²à±ßÀ¸ -->
+        <!-- å·¦ä¾§è¾¹æ  -->
         <aside class="sidebar">
             <div class="sidebar-section">
-                <h3>»ù½ğÀàĞÍÉ¸Ñ¡£¨¶àÑ¡£©</h3>
+                <h3>åŸºé‡‘ç±»å‹ç­›é€‰ï¼ˆå¤šé€‰ï¼‰</h3>
                 <div class="filter-item">
-                    <input type="checkbox" id="type-stock" value="¹ÉÆ±ĞÍ" checked>
-                    <label for="type-stock">¹ÉÆ±ĞÍ</label>
+                    <input type="checkbox" id="type-stock" value="è‚¡ç¥¨å‹" checked>
+                    <label for="type-stock">è‚¡ç¥¨å‹</label>
                 </div>
                 <div class="filter-item">
-                    <input type="checkbox" id="type-mix" value="»ìºÏĞÍ" checked>
-                    <label for="type-mix">»ìºÏĞÍ</label>
+                    <input type="checkbox" id="type-mix" value="æ··åˆå‹" checked>
+                    <label for="type-mix">æ··åˆå‹</label>
                 </div>
                 <div class="filter-item">
-                    <input type="checkbox" id="type-bond" value="Õ®È¯ĞÍ" checked>
-                    <label for="type-bond">Õ®È¯ĞÍ</label>
+                    <input type="checkbox" id="type-bond" value="å€ºåˆ¸å‹" checked>
+                    <label for="type-bond">å€ºåˆ¸å‹</label>
                 </div>
                 <div class="filter-item">
-                    <input type="checkbox" id="type-money" value="»õ±Ò»ù½ğ" checked>
-                    <label for="type-money">»õ±Ò»ù½ğ</label>
+                    <input type="checkbox" id="type-money" value="è´§å¸åŸºé‡‘" checked>
+                    <label for="type-money">è´§å¸åŸºé‡‘</label>
                 </div>
                 <div class="filter-item">
                     <input type="checkbox" id="type-reit" value="REITs" checked>
@@ -281,74 +281,74 @@
                 </div>
             </div>
             <div class="sidebar-section">
-                <h3>´ò·ÖÈ¨ÖØÉèÖÃ£¨×ÜºÍÇ¿ÖÆ100%£©</h3>
+                <h3>æ‰“åˆ†æƒé‡è®¾ç½®ï¼ˆæ€»å’Œå¼ºåˆ¶100%ï¼‰</h3>
                 <div class="weight-row">
                     <div class="weight-label-row">
-                        <span>Òµ¼¨</span>
+                        <span>ä¸šç»©</span>
                         <span id="w-perf-val">30%</span>
                     </div>
                     <input type="range" id="w-perf" min="0" max="100" value="30">
                 </div>
                 <div class="weight-row">
                     <div class="weight-label-row">
-                        <span>»Ø³··çÏÕ</span>
+                        <span>å›æ’¤é£é™©</span>
                         <span id="w-draw-val">25%</span>
                     </div>
                     <input type="range" id="w-draw" min="0" max="100" value="25">
                 </div>
                 <div class="weight-row">
                     <div class="weight-label-row">
-                        <span>»ù½ğ¾­Àí</span>
+                        <span>åŸºé‡‘ç»ç†</span>
                         <span id="w-manager-val">20%</span>
                     </div>
                     <input type="range" id="w-manager" min="0" max="100" value="20">
                 </div>
                 <div class="weight-row">
                     <div class="weight-label-row">
-                        <span>¹æÄ£Á÷¶¯ĞÔ</span>
+                        <span>è§„æ¨¡æµåŠ¨æ€§</span>
                         <span id="w-size-val">15%</span>
                     </div>
                     <input type="range" id="w-size" min="0" max="100" value="15">
                 </div>
                 <div class="weight-row">
                     <div class="weight-label-row">
-                        <span>³Ö²Ö¼¯ÖĞ¶È</span>
+                        <span>æŒä»“é›†ä¸­åº¦</span>
                         <span id="w-conc-val">10%</span>
                     </div>
                     <input type="range" id="w-conc" min="0" max="100" value="10">
                 </div>
-                <div class="weight-total">È¨ÖØºÏ¼Æ£º<span class="total-value" id="weightTotal">100%</span></div>
+                <div class="weight-total">æƒé‡åˆè®¡ï¼š<span class="total-value" id="weightTotal">100%</span></div>
             </div>
         </aside>
-        <!-- Ö÷ÄÚÈİ -->
+        <!-- ä¸»å†…å®¹ -->
         <main class="main">
             <div class="chart-row">
                 <div class="chart-card">
-                    <h4>»ù½ğ×ÛºÏ·ÖÊı·Ö²¼Ö±·½Í¼</h4>
+                    <h4>åŸºé‡‘ç»¼åˆåˆ†æ•°åˆ†å¸ƒç›´æ–¹å›¾</h4>
                     <canvas id="histChart"></canvas>
                 </div>
                 <div class="chart-card">
-                    <h4>¸÷»ù½ğÀàĞÍÆ½¾ù·ÖÖù×´Í¼</h4>
+                    <h4>å„åŸºé‡‘ç±»å‹å¹³å‡åˆ†æŸ±çŠ¶å›¾</h4>
                     <canvas id="typeAvgChart"></canvas>
                 </div>
             </div>
             <div class="table-card">
                 <div class="table-top-bar">
-                    <input class="search-input" id="searchFund" placeholder="ËÑË÷»ù½ğÃû³Æ/´úÂë">
+                    <input class="search-input" id="searchFund" placeholder="æœç´¢åŸºé‡‘åç§°/ä»£ç ">
                 </div>
                 <table>
                     <thead>
                         <tr>
-                            <th data-sort="name">»ù½ğÃû³Æ</th>
-                            <th data-sort="code">´úÂë</th>
-                            <th data-sort="type">ÀàĞÍ</th>
-                            <th data-sort="perf">Òµ¼¨µÃ·Ö</th>
-                            <th data-sort="draw">»Ø³·µÃ·Ö</th>
-                            <th data-sort="manager">¾­ÀíµÃ·Ö</th>
-                            <th data-sort="size">¹æÄ£µÃ·Ö</th>
-                            <th data-sort="conc">¼¯ÖĞ¶ÈµÃ·Ö</th>
-                            <th data-sort="total">×ÛºÏ×Ü·Ö</th>
-                            <th data-sort="star">ĞÇ¼¶</th>
+                            <th data-sort="name">åŸºé‡‘åç§°</th>
+                            <th data-sort="code">ä»£ç </th>
+                            <th data-sort="type">ç±»å‹</th>
+                            <th data-sort="perf">ä¸šç»©å¾—åˆ†</th>
+                            <th data-sort="draw">å›æ’¤å¾—åˆ†</th>
+                            <th data-sort="manager">ç»ç†å¾—åˆ†</th>
+                            <th data-sort="size">è§„æ¨¡å¾—åˆ†</th>
+                            <th data-sort="conc">é›†ä¸­åº¦å¾—åˆ†</th>
+                            <th data-sort="total">ç»¼åˆæ€»åˆ†</th>
+                            <th data-sort="star">æ˜Ÿçº§</th>
                         </tr>
                     </thead>
                     <tbody id="fundTableBody"></tbody>
@@ -356,35 +356,35 @@
             </div>
         </main>
     </div>
-    <!-- »ù½ğÏêÇéµ¯´°£¨À×´ïÍ¼£© -->
+    <!-- åŸºé‡‘è¯¦æƒ…å¼¹çª—ï¼ˆé›·è¾¾å›¾ï¼‰ -->
     <div class="modal-overlay" id="fundModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="modalTitle">»ù½ğÏêÇé</h2>
-                <button class="modal-close" id="closeModal">¡Á</button>
+                <h2 id="modalTitle">åŸºé‡‘è¯¦æƒ…</h2>
+                <button class="modal-close" id="closeModal">Ã—</button>
             </div>
             <canvas id="radarChart"></canvas>
         </div>
     </div>
 
 <script>
-// ===================== Ä£Äâ»ù½ğ²âÊÔÊı¾İ =====================
+// ===================== æ¨¡æ‹ŸåŸºé‡‘æµ‹è¯•æ•°æ® =====================
 const fundRawData = [
-    {name:"»ªÏÄ³É³¤¾«Ñ¡»ìºÏA", code:"009616", type:"»ìºÏĞÍ", perf:82, draw:76, manager:88, size:70, conc:65},
-    {name:"Ò×·½´ïÀ¶³ï¾«Ñ¡»ìºÏ", code:"005827", type:"»ìºÏĞÍ", perf:78, draw:62, manager:90, size:55, conc:60},
-    {name:"ÄÏ·½¿Æ¼¼´´ĞÂA", code:"007340", type:"¹ÉÆ±ĞÍ", perf:85, draw:68, manager:80, size:72, conc:58},
-    {name:"²©Ê±°²Ó¯Õ®È¯A", code:"000084", type:"Õ®È¯ĞÍ", perf:65, draw:92, manager:75, size:88, conc:90},
-    {name:"ÌìºëÓà¶î±¦»õ±Ò", code:"000198", type:"»õ±Ò»ù½ğ", perf:50, draw:98, manager:70, size:95, conc:96},
-    {name:"»ª°²ÕÅ½­¹â´óREIT", code:"508000", type:"REITs", perf:72, draw:80, manager:78, size:66, conc:85},
-    {name:"»ªÏÄºãÉú¿Æ¼¼ETFÁª½Ó", code:"013172", type:"QDII", perf:75, draw:60, manager:72, size:68, conc:70},
-    {name:"Ò×·½´ï¾ÛöÎFOF", code:"012523", type:"FOF", perf:70, draw:84, manager:82, size:76, conc:80},
-    {name:"¸»¹úÌì»İ³É³¤»ìºÏA", code:"161005", type:"»ìºÏĞÍ", perf:80, draw:70, manager:92, size:62, conc:66},
-    {name:"¹úÌ©ÖĞÖ¤°ëµ¼ÌåETFÁª½Ó", code:"007300", type:"¹ÉÆ±ĞÍ", perf:88, draw:55, manager:76, size:74, conc:52},
-    {name:"ÕĞÉÌöÎ¸£ÖĞ¶ÌÕ®", code:"010105", type:"Õ®È¯ĞÍ", perf:62, draw:94, manager:74, size:84, conc:92},
-    {name:"Åô»ªÇ°º£Íò¿ÆREIT", code:"184801", type:"REITs", perf:68, draw:78, manager:75, size:60, conc:82},
+    {name:"åå¤æˆé•¿ç²¾é€‰æ··åˆA", code:"009616", type:"æ··åˆå‹", perf:82, draw:76, manager:88, size:70, conc:65},
+    {name:"æ˜“æ–¹è¾¾è“ç­¹ç²¾é€‰æ··åˆ", code:"005827", type:"æ··åˆå‹", perf:78, draw:62, manager:90, size:55, conc:60},
+    {name:"å—æ–¹ç§‘æŠ€åˆ›æ–°A", code:"007340", type:"è‚¡ç¥¨å‹", perf:85, draw:68, manager:80, size:72, conc:58},
+    {name:"åšæ—¶å®‰ç›ˆå€ºåˆ¸A", code:"000084", type:"å€ºåˆ¸å‹", perf:65, draw:92, manager:75, size:88, conc:90},
+    {name:"å¤©å¼˜ä½™é¢å®è´§å¸", code:"000198", type:"è´§å¸åŸºé‡‘", perf:50, draw:98, manager:70, size:95, conc:96},
+    {name:"åå®‰å¼ æ±Ÿå…‰å¤§REIT", code:"508000", type:"REITs", perf:72, draw:80, manager:78, size:66, conc:85},
+    {name:"åå¤æ’ç”Ÿç§‘æŠ€ETFè”æ¥", code:"013172", type:"QDII", perf:75, draw:60, manager:72, size:68, conc:70},
+    {name:"æ˜“æ–¹è¾¾èšé‘«FOF", code:"012523", type:"FOF", perf:70, draw:84, manager:82, size:76, conc:80},
+    {name:"å¯Œå›½å¤©æƒ æˆé•¿æ··åˆA", code:"161005", type:"æ··åˆå‹", perf:80, draw:70, manager:92, size:62, conc:66},
+    {name:"å›½æ³°ä¸­è¯åŠå¯¼ä½“ETFè”æ¥", code:"007300", type:"è‚¡ç¥¨å‹", perf:88, draw:55, manager:76, size:74, conc:52},
+    {name:"æ‹›å•†é‘«ç¦ä¸­çŸ­å€º", code:"010105", type:"å€ºåˆ¸å‹", perf:62, draw:94, manager:74, size:84, conc:92},
+    {name:"é¹åå‰æµ·ä¸‡ç§‘REIT", code:"184801", type:"REITs", perf:68, draw:78, manager:75, size:60, conc:82},
 ];
 
-// ===================== È¨ÖØ±äÁ¿ =====================
+// ===================== æƒé‡å˜é‡ =====================
 let weights = {
     perf: 30,
     draw:25,
@@ -392,12 +392,12 @@ let weights = {
     size:15,
     conc:10
 };
-// Í¼±íÊµÀı
+// å›¾è¡¨å®ä¾‹
 let histChart, typeAvgChart, radarChart;
-// µ±Ç°É¸Ñ¡ºó»ù½ğÁĞ±í
+// å½“å‰ç­›é€‰ååŸºé‡‘åˆ—è¡¨
 let filteredFunds = [];
 
-// ===================== ¼ÆËã×ÛºÏ×Ü·Ö =====================
+// ===================== è®¡ç®—ç»¼åˆæ€»åˆ† =====================
 function calcTotalScore(fund) {
     const total = (
         fund.perf * weights.perf +
@@ -408,16 +408,16 @@ function calcTotalScore(fund) {
     ) / 100;
     return Number(total.toFixed(2));
 }
-// ·ÖÊı×ªĞÇ¼¶
+// åˆ†æ•°è½¬æ˜Ÿçº§
 function getStar(score) {
-    if(score >=85) return "¡ï¡ï¡ï¡ï¡ï";
-    if(score >=75) return "¡ï¡ï¡ï¡ï¡î";
-    if(score >=65) return "¡ï¡ï¡ï¡î¡î";
-    if(score >=55) return "¡ï¡ï¡î¡î¡î";
-    return "¡ï¡î¡î¡î¡î";
+    if(score >=85) return "â˜…â˜…â˜…â˜…â˜…";
+    if(score >=75) return "â˜…â˜…â˜…â˜…â˜†";
+    if(score >=65) return "â˜…â˜…â˜…â˜†â˜†";
+    if(score >=55) return "â˜…â˜…â˜†â˜†â˜†";
+    return "â˜…â˜†â˜†â˜†â˜†";
 }
 
-// ===================== È¨ÖØÁª¶¯£¬Ç¿ÖÆ×ÜºÍ100 =====================
+// ===================== æƒé‡è”åŠ¨ï¼Œå¼ºåˆ¶æ€»å’Œ100 =====================
 const weightInputs = [
     {el:document.getElementById("w-perf"), label:document.getElementById("w-perf-val"), key:"perf"},
     {el:document.getElementById("w-draw"), label:document.getElementById("w-draw-val"), key:"draw"},
@@ -441,7 +441,7 @@ function syncWeightDisplay() {
     const sum = Object.values(weights).reduce((a,b)=>a+b,0);
     weightTotalEl.textContent = sum + "%";
 }
-// È¨ÖØ¹éÒ»»¯£º×ÜºÍÇ¿ÖÆ=100
+// æƒé‡å½’ä¸€åŒ–ï¼šæ€»å’Œå¼ºåˆ¶=100
 function autoNormalizeWeight(){
     let sum = Object.values(weights).reduce((a,b)=>a+b,0);
     if(sum === 0) {
@@ -460,7 +460,7 @@ function syncWeightInputs() {
     })
 }
 
-// ===================== É¸Ñ¡Âß¼­ =====================
+// ===================== ç­›é€‰é€»è¾‘ =====================
 function getSelectedTypes() {
     const boxes = document.querySelectorAll(".filter-item input[type=checkbox]:checked");
     return Array.from(boxes).map(b=>b.value);
@@ -473,13 +473,13 @@ function filterFunds() {
         const matchSearch = fund.name.toLowerCase().includes(searchText) || fund.code.toLowerCase().includes(searchText);
         return matchType && matchSearch;
     })
-    // ¼ÆËã×Ü·Ö+ĞÇ¼¶
+    // è®¡ç®—æ€»åˆ†+æ˜Ÿçº§
     filteredFunds = filteredFunds.map(f=>{
         return {...f, total:calcTotalScore(f), star:getStar(calcTotalScore(f))};
     })
 }
 
-// ===================== äÖÈ¾»ù½ğ±í¸ñ =====================
+// ===================== æ¸²æŸ“åŸºé‡‘è¡¨æ ¼ =====================
 const tableBody = document.getElementById("fundTableBody");
 function renderTable() {
     tableBody.innerHTML = "";
@@ -502,7 +502,7 @@ function renderTable() {
     })
 }
 
-// ===================== ±í¸ñ±íÍ·ÅÅĞò =====================
+// ===================== è¡¨æ ¼è¡¨å¤´æ’åº =====================
 document.querySelectorAll("th[data-sort]").forEach(th=>{
     th.addEventListener("click", ()=>{
         const sortKey = th.dataset.sort;
@@ -514,12 +514,12 @@ document.querySelectorAll("th[data-sort]").forEach(th=>{
     })
 })
 
-// ===================== Í¼±íäÖÈ¾ =====================
+// ===================== å›¾è¡¨æ¸²æŸ“ =====================
 function renderCharts() {
-    // Ïú»Ù¾ÉÍ¼±í
+    // é”€æ¯æ—§å›¾è¡¨
     if(histChart) histChart.destroy();
     if(typeAvgChart) typeAvgChart.destroy();
-    // ·ÖÊı·Ö²¼Ö±·½Í¼
+    // åˆ†æ•°åˆ†å¸ƒç›´æ–¹å›¾
     const scoreArr = filteredFunds.map(f=>f.total);
     const histCtx = document.getElementById("histChart").getContext("2d");
     histChart = new Chart(histCtx, {
@@ -527,7 +527,7 @@ function renderCharts() {
         data:{
             labels:scoreArr.map(s=>s),
             datasets:[{
-                label:"×ÛºÏ·ÖÊı",
+                label:"ç»¼åˆåˆ†æ•°",
                 data:scoreArr,
                 backgroundColor:"#f97316",
                 borderColor:"#ea580c",
@@ -544,7 +544,7 @@ function renderCharts() {
             }
         }
     })
-    // ¸÷ÀàĞÍÆ½¾ù·ÖÖù×´Í¼
+    // å„ç±»å‹å¹³å‡åˆ†æŸ±çŠ¶å›¾
     const typeGroup = {};
     filteredFunds.forEach(f=>{
         if(!typeGroup[f.type]) typeGroup[f.type] = [];
@@ -561,7 +561,7 @@ function renderCharts() {
         data:{
             labels:typeLabels,
             datasets:[{
-                label:"ÀàĞÍÆ½¾ù·Ö",
+                label:"ç±»å‹å¹³å‡åˆ†",
                 data:typeAvgData,
                 backgroundColor:"#2563eb",
                 borderColor:"#1d4ed8",
@@ -580,22 +580,22 @@ function renderCharts() {
     })
 }
 
-// ===================== »ù½ğÏêÇéµ¯´°+À×´ïÍ¼ =====================
+// ===================== åŸºé‡‘è¯¦æƒ…å¼¹çª—+é›·è¾¾å›¾ =====================
 const modalOverlay = document.getElementById("fundModal");
 const modalTitle = document.getElementById("modalTitle");
 document.getElementById("closeModal").onclick = ()=>modalOverlay.style.display="none";
 modalOverlay.onclick = (e)=>{if(e.target===modalOverlay) modalOverlay.style.display="none";};
 function openFundModal(fund) {
     modalOverlay.style.display="flex";
-    modalTitle.textContent = `${fund.name}£¨${fund.code}£©·ÖÏîµÃ·ÖÀ×´ïÍ¼`;
+    modalTitle.textContent = `${fund.name}ï¼ˆ${fund.code}ï¼‰åˆ†é¡¹å¾—åˆ†é›·è¾¾å›¾`;
     if(radarChart) radarChart.destroy();
     const radarCtx = document.getElementById("radarChart").getContext("2d");
     radarChart = new Chart(radarCtx, {
         type:"radar",
         data:{
-            labels:["Òµ¼¨","»Ø³··çÏÕ","»ù½ğ¾­Àí","¹æÄ£Á÷¶¯ĞÔ","³Ö²Ö¼¯ÖĞ¶È"],
+            labels:["ä¸šç»©","å›æ’¤é£é™©","åŸºé‡‘ç»ç†","è§„æ¨¡æµåŠ¨æ€§","æŒä»“é›†ä¸­åº¦"],
             datasets:[{
-                label:"·ÖÏîµÃ·Ö",
+                label:"åˆ†é¡¹å¾—åˆ†",
                 data:[fund.perf, fund.draw, fund.manager, fund.size, fund.conc],
                 backgroundColor:"rgba(249, 115, 22,0.2)",
                 borderColor:"#f97316",
@@ -619,21 +619,21 @@ function openFundModal(fund) {
     })
 }
 
-// ===================== È«¾ÖäÖÈ¾Èë¿Ú =====================
+// ===================== å…¨å±€æ¸²æŸ“å…¥å£ =====================
 function renderAll() {
     filterFunds();
     renderTable();
     renderCharts();
 }
 
-// ===================== ÊÂ¼ş°ó¶¨£ºËÑË÷¡¢ÖØÖÃ¡¢²à±ßÀ¸ÒÆ¶¯¶Ë =====================
+// ===================== äº‹ä»¶ç»‘å®šï¼šæœç´¢ã€é‡ç½®ã€ä¾§è¾¹æ ç§»åŠ¨ç«¯ =====================
 document.getElementById("searchFund").addEventListener("input", renderAll);
 document.getElementById("resetAll").addEventListener("click", ()=>{
-    // ÖØÖÃÈ¨ÖØ
+    // é‡ç½®æƒé‡
     weights = {perf:30, draw:25, manager:20, size:15, conc:10};
     syncWeightInputs();
     syncWeightDisplay();
-    // ÖØÖÃËùÓĞÉ¸Ñ¡¿ò¹´Ñ¡
+    // é‡ç½®æ‰€æœ‰ç­›é€‰æ¡†å‹¾é€‰
     document.querySelectorAll(".filter-item input[type=checkbox]").forEach(cb=>cb.checked=true);
     document.getElementById("searchFund").value = "";
     renderAll();
@@ -641,12 +641,12 @@ document.getElementById("resetAll").addEventListener("click", ()=>{
 document.getElementById("toggleSidebar").addEventListener("click", ()=>{
     document.querySelector(".sidebar").classList.toggle("active");
 })
-// ËùÓĞÉ¸Ñ¡¸´Ñ¡¿ò±ä¸ü´¥·¢Ë¢ĞÂ
+// æ‰€æœ‰ç­›é€‰å¤é€‰æ¡†å˜æ›´è§¦å‘åˆ·æ–°
 document.querySelectorAll(".filter-item input[type=checkbox]").forEach(cb=>{
     cb.addEventListener("change", renderAll);
 })
 
-// ===================== Ò³Ãæ³õÊ¼»¯ =====================
+// ===================== é¡µé¢åˆå§‹åŒ– =====================
 window.addEventListener("DOMContentLoaded", renderAll);
 </script>
 </body>
