@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公募基金打分面板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 全局样式 - 深色商务金融仪表盘 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        .app-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 60px 1fr;
+            grid-template-areas:
+                "header header"
+                "sidebar main";
+            height: 100vh;
+        }
+        /* 顶部导航栏 */
+        .header {
+            grid-area: header;
+            background-color: #1e293b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid #334155;
+            z-index: 10;
+        }
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .header-actions button {
+            padding: 6px 14px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-reset {
+            background-color: #334155;
+            color: #fff;
+            margin-left:8px;
+        }
+        .btn-reset:hover {
+            background-color:#475569;
+        }
+        /* 左侧边栏 */
+        .sidebar {
+            grid-area: sidebar;
+            background-color: #1e293b;
+            border-right:1px solid #334155;
+            padding:20px;
+            overflow-y:auto;
+        }
+        .sidebar-section {
+            margin-bottom:28px;
+        }
+        .sidebar-section h3 {
+            font-size:0.95rem;
+            margin-bottom:12px;
+            color:#cbd5e1;
+            border-bottom:1px solid #334155;
+            padding-bottom:6px;
+        }
+        .filter-item {
+            display:flex;
+            align-items:center;
+            margin-bottom:10px;
+            gap:8px;
+        }
+        .weight-row {
+            margin-bottom:14px;
+        }
+        .weight-label-row {
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:4px;
+            font-size:0.88rem;
+        }
+        input[type="range"] {
+            width:100%;
+            accent-color:#f97316;
+        }
+        .weight-total {
+            margin-top:16px;
+            padding:10px;
+            background:#0f172a;
+            border-radius:6px;
+            font-size:0.9rem;
+        }
+        .total-value {
+            color:#f97316;
+            font-weight:bold;
+        }
+        /* 主内容区域 */
+        .main {
+            grid-area: main;
+            padding:20px;
+            overflow-y:auto;
+        }
+        .chart-row {
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap:20px;
+            margin-bottom:20px;
+        }
+        .chart-card {
+            background:#1e293b;
+            padding:16px;
+            border-radius:8px;
+            border:1px solid #334155;
+        }
+        .chart-card h4 {
+            margin-bottom:12px;
+            color:#cbd5e1;
+        }
+        .table-card {
+            background:#1e293b;
+            border-radius:8px;
+            border:1px solid #334155;
+            overflow:hidden;
+        }
+        .table-top-bar {
+            padding:16px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:1px solid #334155;
+        }
+        .search-input {
+            padding:8px 12px;
+            width:320px;
+            background:#0f172a;
+            border:1px solid #334155;
+            color:#fff;
+            border-radius:4px;
+        }
+        table {
+            width:100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding:12px 16px;
+            text-align:left;
+            border-bottom:1px solid #334155;
+        }
+        th {
+            background:#334155;
+            cursor:pointer;
+            user-select:none;
+            font-size:0.9rem;
+        }
+        th:hover {
+            background:#475569;
+        }
+        tr:hover {
+            background:#334155;
+            cursor:pointer;
+        }
+        .score-orange {
+            color:#f97316;
+            font-weight:bold;
+        }
+        .star {
+            color:#fbbf24;
+        }
+        /* 弹窗样式 */
+        .modal-overlay {
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.7);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:100;
+        }
+        .modal {
+            width:min(600px,90vw);
+            background:#1e293b;
+            border-radius:10px;
+            padding:24px;
+            border:1px solid #475569;
+        }
+        .modal-header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:16px;
+        }
+        .modal-close {
+            background:transparent;
+            border:none;
+            color:#cbd5e1;
+            font-size:1.5rem;
+            cursor:pointer;
+        }
+        /* 响应式移动端适配 */
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns:1fr;
+                grid-template-areas:
+                    "header"
+                    "main";
+            }
+            .sidebar {
+                display:none;
+                position:fixed;
+                top:60px;
+                left:0;
+                bottom:0;
+                width:260px;
+                z-index:50;
+            }
+            .sidebar.active {
+                display:block;
+            }
+            .chart-row {
+                grid-template-columns:1fr;
+            }
+            .search-input {
+                width:100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <h1>公募基金打分面板</h1>
+            <div class="header-actions">
+                <button id="toggleSidebar">筛选面板</button>
+                <button class="btn-reset" id="resetAll">重置筛选与权重</button>
+            </div>
+        </header>
+        <!-- 左侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>基金类型筛选（多选）</h3>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-stock" value="股票型" checked>
+                    <label for="type-stock">股票型</label>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-mix" value="混合型" checked>
+                    <label for="type-mix">混合型</label>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-bond" value="债券型" checked>
+                    <label for="type-bond">债券型</label>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-money" value="货币基金" checked>
+                    <label for="type-money">货币基金</label>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-reit" value="REITs" checked>
+                    <label for="type-reit">REITs</label>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-qdii" value="QDII" checked>
+                    <label for="type-qdii">QDII</label>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="type-fof" value="FOF" checked>
+                    <label for="type-fof">FOF</label>
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <h3>打分权重设置（总和强制100%）</h3>
+                <div class="weight-row">
+                    <div class="weight-label-row">
+                        <span>业绩</span>
+                        <span id="w-perf-val">30%</span>
+                    </div>
+                    <input type="range" id="w-perf" min="0" max="100" value="30">
+                </div>
+                <div class="weight-row">
+                    <div class="weight-label-row">
+                        <span>回撤风险</span>
+                        <span id="w-draw-val">25%</span>
+                    </div>
+                    <input type="range" id="w-draw" min="0" max="100" value="25">
+                </div>
+                <div class="weight-row">
+                    <div class="weight-label-row">
+                        <span>基金经理</span>
+                        <span id="w-manager-val">20%</span>
+                    </div>
+                    <input type="range" id="w-manager" min="0" max="100" value="20">
+                </div>
+                <div class="weight-row">
+                    <div class="weight-label-row">
+                        <span>规模流动性</span>
+                        <span id="w-size-val">15%</span>
+                    </div>
+                    <input type="range" id="w-size" min="0" max="100" value="15">
+                </div>
+                <div class="weight-row">
+                    <div class="weight-label-row">
+                        <span>持仓集中度</span>
+                        <span id="w-conc-val">10%</span>
+                    </div>
+                    <input type="range" id="w-conc" min="0" max="100" value="10">
+                </div>
+                <div class="weight-total">权重合计：<span class="total-value" id="weightTotal">100%</span></div>
+            </div>
+        </aside>
+        <!-- 主内容 -->
+        <main class="main">
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h4>基金综合分数分布直方图</h4>
+                    <canvas id="histChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>各基金类型平均分柱状图</h4>
+                    <canvas id="typeAvgChart"></canvas>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-top-bar">
+                    <input class="search-input" id="searchFund" placeholder="搜索基金名称/代码">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-sort="name">基金名称</th>
+                            <th data-sort="code">代码</th>
+                            <th data-sort="type">类型</th>
+                            <th data-sort="perf">业绩得分</th>
+                            <th data-sort="draw">回撤得分</th>
+                            <th data-sort="manager">经理得分</th>
+                            <th data-sort="size">规模得分</th>
+                            <th data-sort="conc">集中度得分</th>
+                            <th data-sort="total">综合总分</th>
+                            <th data-sort="star">星级</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fundTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <!-- 基金详情弹窗（雷达图） -->
+    <div class="modal-overlay" id="fundModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">基金详情</h2>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <canvas id="radarChart"></canvas>
+        </div>
+    </div>
+
+<script>
+// ===================== 模拟基金测试数据 =====================
+const fundRawData = [
+    {name:"华夏成长精选混合A", code:"009616", type:"混合型", perf:82, draw:76, manager:88, size:70, conc:65},
+    {name:"易方达蓝筹精选混合", code:"005827", type:"混合型", perf:78, draw:62, manager:90, size:55, conc:60},
+    {name:"南方科技创新A", code:"007340", type:"股票型", perf:85, draw:68, manager:80, size:72, conc:58},
+    {name:"博时安盈债券A", code:"000084", type:"债券型", perf:65, draw:92, manager:75, size:88, conc:90},
+    {name:"天弘余额宝货币", code:"000198", type:"货币基金", perf:50, draw:98, manager:70, size:95, conc:96},
+    {name:"华安张江光大REIT", code:"508000", type:"REITs", perf:72, draw:80, manager:78, size:66, conc:85},
+    {name:"华夏恒生科技ETF联接", code:"013172", type:"QDII", perf:75, draw:60, manager:72, size:68, conc:70},
+    {name:"易方达聚鑫FOF", code:"012523", type:"FOF", perf:70, draw:84, manager:82, size:76, conc:80},
+    {name:"富国天惠成长混合A", code:"161005", type:"混合型", perf:80, draw:70, manager:92, size:62, conc:66},
+    {name:"国泰中证半导体ETF联接", code:"007300", type:"股票型", perf:88, draw:55, manager:76, size:74, conc:52},
+    {name:"招商鑫福中短债", code:"010105", type:"债券型", perf:62, draw:94, manager:74, size:84, conc:92},
+    {name:"鹏华前海万科REIT", code:"184801", type:"REITs", perf:68, draw:78, manager:75, size:60, conc:82},
+];
+
+// ===================== 权重变量 =====================
+let weights = {
+    perf: 30,
+    draw:25,
+    manager:20,
+    size:15,
+    conc:10
+};
+// 图表实例
+let histChart, typeAvgChart, radarChart;
+// 当前筛选后基金列表
+let filteredFunds = [];
+
+// ===================== 计算综合总分 =====================
+function calcTotalScore(fund) {
+    const total = (
+        fund.perf * weights.perf +
+        fund.draw * weights.draw +
+        fund.manager * weights.manager +
+        fund.size * weights.size +
+        fund.conc * weights.conc
+    ) / 100;
+    return Number(total.toFixed(2));
+}
+// 分数转星级
+function getStar(score) {
+    if(score >=85) return "★★★★★";
+    if(score >=75) return "★★★★☆";
+    if(score >=65) return "★★★☆☆";
+    if(score >=55) return "★★☆☆☆";
+    return "★☆☆☆☆";
+}
+
+// ===================== 权重联动，强制总和100 =====================
+const weightInputs = [
+    {el:document.getElementById("w-perf"), label:document.getElementById("w-perf-val"), key:"perf"},
+    {el:document.getElementById("w-draw"), label:document.getElementById("w-draw-val"), key:"draw"},
+    {el:document.getElementById("w-manager"), label:document.getElementById("w-manager-val"), key:"manager"},
+    {el:document.getElementById("w-size"), label:document.getElementById("w-size-val"), key:"size"},
+    {el:document.getElementById("w-conc"), label:document.getElementById("w-conc-val"), key:"conc"},
+];
+const weightTotalEl = document.getElementById("weightTotal");
+weightInputs.forEach(item=>{
+    item.el.addEventListener("input", ()=>{
+        weights[item.key] = Number(item.el.value);
+        syncWeightDisplay();
+        autoNormalizeWeight();
+        renderAll();
+    })
+})
+function syncWeightDisplay() {
+    weightInputs.forEach(item=>{
+        item.label.textContent = weights[item.key] + "%";
+    })
+    const sum = Object.values(weights).reduce((a,b)=>a+b,0);
+    weightTotalEl.textContent = sum + "%";
+}
+// 权重归一化：总和强制=100
+function autoNormalizeWeight(){
+    let sum = Object.values(weights).reduce((a,b)=>a+b,0);
+    if(sum === 0) {
+        weights = {perf:20,draw:20,manager:20,size:20,conc:20};
+    } else {
+        for(let k in weights) {
+            weights[k] = Math.round(weights[k] / sum * 100);
+        }
+    }
+    syncWeightInputs();
+    syncWeightDisplay();
+}
+function syncWeightInputs() {
+    weightInputs.forEach(item=>{
+        item.el.value = weights[item.key];
+    })
+}
+
+// ===================== 筛选逻辑 =====================
+function getSelectedTypes() {
+    const boxes = document.querySelectorAll(".filter-item input[type=checkbox]:checked");
+    return Array.from(boxes).map(b=>b.value);
+}
+function filterFunds() {
+    const selectedTypes = getSelectedTypes();
+    const searchText = document.getElementById("searchFund").value.trim().toLowerCase();
+    filteredFunds = fundRawData.filter(fund=>{
+        const matchType = selectedTypes.includes(fund.type);
+        const matchSearch = fund.name.toLowerCase().includes(searchText) || fund.code.toLowerCase().includes(searchText);
+        return matchType && matchSearch;
+    })
+    // 计算总分+星级
+    filteredFunds = filteredFunds.map(f=>{
+        return {...f, total:calcTotalScore(f), star:getStar(calcTotalScore(f))};
+    })
+}
+
+// ===================== 渲染基金表格 =====================
+const tableBody = document.getElementById("fundTableBody");
+function renderTable() {
+    tableBody.innerHTML = "";
+    filteredFunds.forEach(fund=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${fund.name}</td>
+            <td>${fund.code}</td>
+            <td>${fund.type}</td>
+            <td>${fund.perf}</td>
+            <td>${fund.draw}</td>
+            <td>${fund.manager}</td>
+            <td>${fund.size}</td>
+            <td>${fund.conc}</td>
+            <td class="score-orange">${fund.total}</td>
+            <td class="star">${fund.star}</td>
+        `;
+        tr.onclick = ()=>openFundModal(fund);
+        tableBody.appendChild(tr);
+    })
+}
+
+// ===================== 表格表头排序 =====================
+document.querySelectorAll("th[data-sort]").forEach(th=>{
+    th.addEventListener("click", ()=>{
+        const sortKey = th.dataset.sort;
+        filteredFunds.sort((a,b)=>{
+            if(typeof a[sortKey] === "string") return a[sortKey].localeCompare(b[sortKey]);
+            return a[sortKey] - b[sortKey];
+        })
+        renderTable();
+    })
+})
+
+// ===================== 图表渲染 =====================
+function renderCharts() {
+    // 销毁旧图表
+    if(histChart) histChart.destroy();
+    if(typeAvgChart) typeAvgChart.destroy();
+    // 分数分布直方图
+    const scoreArr = filteredFunds.map(f=>f.total);
+    const histCtx = document.getElementById("histChart").getContext("2d");
+    histChart = new Chart(histCtx, {
+        type:"bar",
+        data:{
+            labels:scoreArr.map(s=>s),
+            datasets:[{
+                label:"综合分数",
+                data:scoreArr,
+                backgroundColor:"#f97316",
+                borderColor:"#ea580c",
+                borderWidth:1
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:true,
+            plugins:{legend:{labels:{color:"#cbd5e1"}}},
+            scales:{
+                x:{ticks:{color:"#94a3b8"},grid:{color:"#334155"}},
+                y:{ticks:{color:"#94a3b8"},grid:{color:"#334155"},min:0,max:100}
+            }
+        }
+    })
+    // 各类型平均分柱状图
+    const typeGroup = {};
+    filteredFunds.forEach(f=>{
+        if(!typeGroup[f.type]) typeGroup[f.type] = [];
+        typeGroup[f.type].push(f.total);
+    })
+    const typeLabels = Object.keys(typeGroup);
+    const typeAvgData = typeLabels.map(t=>{
+        const arr = typeGroup[t];
+        return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2);
+    })
+    const typeCtx = document.getElementById("typeAvgChart").getContext("2d");
+    typeAvgChart = new Chart(typeCtx, {
+        type:"bar",
+        data:{
+            labels:typeLabels,
+            datasets:[{
+                label:"类型平均分",
+                data:typeAvgData,
+                backgroundColor:"#2563eb",
+                borderColor:"#1d4ed8",
+                borderWidth:1
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:true,
+            plugins:{legend:{labels:{color:"#cbd5e1"}}},
+            scales:{
+                x:{ticks:{color:"#94a3b8"},grid:{color:"#334155"}},
+                y:{ticks:{color:"#94a3b8"},grid:{color:"#334155"},min:0,max:100}
+            }
+        }
+    })
+}
+
+// ===================== 基金详情弹窗+雷达图 =====================
+const modalOverlay = document.getElementById("fundModal");
+const modalTitle = document.getElementById("modalTitle");
+document.getElementById("closeModal").onclick = ()=>modalOverlay.style.display="none";
+modalOverlay.onclick = (e)=>{if(e.target===modalOverlay) modalOverlay.style.display="none";};
+function openFundModal(fund) {
+    modalOverlay.style.display="flex";
+    modalTitle.textContent = `${fund.name}（${fund.code}）分项得分雷达图`;
+    if(radarChart) radarChart.destroy();
+    const radarCtx = document.getElementById("radarChart").getContext("2d");
+    radarChart = new Chart(radarCtx, {
+        type:"radar",
+        data:{
+            labels:["业绩","回撤风险","基金经理","规模流动性","持仓集中度"],
+            datasets:[{
+                label:"分项得分",
+                data:[fund.perf, fund.draw, fund.manager, fund.size, fund.conc],
+                backgroundColor:"rgba(249, 115, 22,0.2)",
+                borderColor:"#f97316",
+                pointBackgroundColor:"#f97316"
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:true,
+            plugins:{legend:{labels:{color:"#cbd5e1"}}},
+            scales:{
+                r:{
+                    min:0,max:100,
+                    ticks:{color:"#94a3b8", backdropColor:"transparent"},
+                    grid:{color:"#334155"},
+                    angleLines:{color:"#334155"},
+                    pointLabels:{color:"#cbd5e1"}
+                }
+            }
+        }
+    })
+}
+
+// ===================== 全局渲染入口 =====================
+function renderAll() {
+    filterFunds();
+    renderTable();
+    renderCharts();
+}
+
+// ===================== 事件绑定：搜索、重置、侧边栏移动端 =====================
+document.getElementById("searchFund").addEventListener("input", renderAll);
+document.getElementById("resetAll").addEventListener("click", ()=>{
+    // 重置权重
+    weights = {perf:30, draw:25, manager:20, size:15, conc:10};
+    syncWeightInputs();
+    syncWeightDisplay();
+    // 重置所有筛选框勾选
+    document.querySelectorAll(".filter-item input[type=checkbox]").forEach(cb=>cb.checked=true);
+    document.getElementById("searchFund").value = "";
+    renderAll();
+})
+document.getElementById("toggleSidebar").addEventListener("click", ()=>{
+    document.querySelector(".sidebar").classList.toggle("active");
+})
+// 所有筛选复选框变更触发刷新
+document.querySelectorAll(".filter-item input[type=checkbox]").forEach(cb=>{
+    cb.addEventListener("change", renderAll);
+})
+
+// ===================== 页面初始化 =====================
+window.addEventListener("DOMContentLoaded", renderAll);
+</script>
+</body>
+</html>
